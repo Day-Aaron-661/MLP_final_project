@@ -29,6 +29,7 @@
 ## 資料集 (Dataset)
 Mahdavi, A. (2020). Skin cancer (PAD-UFES-20) [Data set]. Kaggle. 
 https://www.kaggle.com/datasets/mahdavi1202/skin-cancer
+
 本研究使用 Skin cancer (PAD-UFES-20) 資料集，包含約 2300 張皮膚鏡影像。
 * **影像預處理**: 統一 Resize 並 Padding 至 224x224 像素。
 * **類別**: 包含 akiec, bcc, bkl, df, mel, nv, vasc 等 7 大類。
