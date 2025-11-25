@@ -3,12 +3,15 @@
 ## 專案簡介 (Project Overview)
 本專案為機器學習概論與實作期中專題報告。我們提出了一種 **Two-stage pipeline** 的方法來辨識皮膚疾病影像。
 
-傳統 CNN 模型雖然強大，但存在「黑箱問題」且訓練成本高。本研究結合了 **CNN (EfficientNet-B0)** 強大的特徵提取能力與 **Random Forest** 的分類能力，期望達到更客觀且快速的輔助診斷 。
+本研究結合了 **CNN (EfficientNet-B0)** 強大的特徵提取能力與 **Random Forest** 的分類能力，期望達到更客觀且快速的輔助診斷 。
 
 ## 研究方法 (Methodology)
-我們的流程包含兩個主要階段：
-1. **Feature Extraction**: 使用預訓練的 EfficientNet-B0 從影像中提取特徵向量 (Feature Vector)。
-2. **Classification**: 將影像特徵與病患 Metadata (如年齡、性別、部位) 串接 (Concatenation) 後，送入 Random Forest 進行最終分類。
+我們的流程包含幾個主要階段：
+1. **Load Data**: 讀取資料集
+2. **Data Preprocessing**:資料預處理，統一影像大小，並針對較少樣本數的類別做 data augmentation。
+3. **Feature Extraction**: 使用預訓練的 EfficientNet-B0 從影像中提取特徵向量 (Feature Vector)。
+4. **Classification**: 將影像特徵與病患 Metadata (如年齡、性別、部位) 串接 (Concatenation) 後，送入 Random Forest 進行最終分類。
+5. **Evaluation metric**:計算並呈現模型評估指標如 recall, precision, F2-score, 和 confusion matrix等
 
 ## 專案檔案結構 (Project Structure)
 
