@@ -24,7 +24,9 @@
 | `config.py` | **參數設定**。存放全域變數 (如影像路徑、Batch Size、Random Seed)。 |
 
 ## 資料集 (Dataset)
-本研究使用 **HAM10000** 資料集，包含約 10,015 張皮膚鏡影像。
+Mahdavi, A. (2020). Skin cancer (PAD-UFES-20) [Data set]. Kaggle. 
+https://www.kaggle.com/datasets/mahdavi1202/skin-cancer
+本研究使用 Skin cancer (PAD-UFES-20) 資料集，包含約 2300 張皮膚鏡影像。
 * **影像預處理**: 統一 Resize 並 Padding 至 224x224 像素。
 * **類別**: 包含 akiec, bcc, bkl, df, mel, nv, vasc 等 7 大類。
 
