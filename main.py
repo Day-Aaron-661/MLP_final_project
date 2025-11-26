@@ -70,17 +70,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-    
-
-    # --- 建立 Dataset (Class) ---
-    # 初始化時，它會自動讀圖、Resize、並存在 RAM 裡
-    
-
-    
-
-
-
-if __name__ == "__main__":
-    main()
