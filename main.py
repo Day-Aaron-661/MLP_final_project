@@ -13,19 +13,11 @@ def main():
     # --- 定義動態增強 (Augmentation) ---
     # 這是要在 __getitem__ 裡隨機做的
     train_aug = preprocess.get_augmentation() # 回傳隨機旋轉函數
-
-    print("=== 階段一：資料讀取 (Raw Data Loading) ===")
-    # 呼叫 dataset.py 讀取原始資料
-    # 回傳的只是路徑清單 (image_paths) 和原始表格資料 (metadata_df)
-    Train_csv_path = dataset.get_csv(part="train", METADATA_DIR)
-    Test_csv_path = dataset.get_csv(part="test", METADATA_DIR)
-    
-    print(f"原始訓練資料筆數: {len(train_paths)}")
     
     print("正在處理訓練集 (含 Data Augmentation)...")
     print("=== 初始化訓練集 ===")
     train_dataset = dataset.SkinLesionDataset(
-        csv_file=Train_csv_path,
+        csv_file=METADATA_DIR,
         img_dir=IMAGE_DIR,
         mode='train',
         augmentation=train_aug # 把增強邏輯傳進去
@@ -39,12 +31,12 @@ def main():
         augmentation=None # 測試集不做增強
     )
 
-    print("=== 階段三：封裝 Data Loader ===")
+    print("=== 封裝 Data Loader ===")
     # --- 建立 DataLoader ---
     train_loader = DataLoader(train_dataset, batch_size=BATCH_SIZE, shuffle=True)
     test_loader = DataLoader(test_dataset, batch_size=BATCH_SIZE, shuffle=False)
 
-    print("=== 階段四：CNN 特徵提取 (Feature Extraction) ===")
+    print("=== CNN 特徵提取 (Feature Extraction) ===")
     # 這裡的邏輯與之前類似，但輸入的是已經處理好的 loader
     cnn_model = models.CNN_model()
     
@@ -55,13 +47,13 @@ def main():
     print("提取測試集特徵...")
     X_test_features = cnn_model.extract_features(cnn_model, test_loader)
 
-    print("=== 階段五：Random Forest 分類 (Classification) ===")
+    print("=== Random Forest 分類 (Classification) ===")
     rf_model = models.RF_classifier()
     
     print("訓練 RF 模型...")
     rf_model.train(X_train_features, train_labels) # [cite: 69]
     
-    print("=== 階段六：評估與結果 (Evaluation) ===")
+    print("=== 評估與結果 (Evaluation) ===")
     predictions = rf_model.predict(X_test_features)
     
     # 計算 Recall, Precision, F2-score [cite: 71-78]
