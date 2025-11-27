@@ -1,4 +1,4 @@
-import config
+import config as cfg
 import dataset
 import preprocess
 import models
@@ -6,35 +6,37 @@ import utils
 import numpy as np
 from torch.utils.data import DataLoader
 
-# 假設使用 PyTorch 或 TensorFlow，這裡以通用的命名為主
 
 def main():
 
-    # --- 定義動態增強 (Augmentation) ---
-    # 這是要在 __getitem__ 裡隨機做的
-    train_aug = preprocess.get_augmentation() # 回傳隨機旋轉函數
+    # 先載入 metadata，然後去除一些 nan 和不要的欄位
+    all_meta = dataset.load_csv( csv_path=cfg.METADATA_PATH )
+    all_clean_meta = preprocess.get_clean_data( all_meta )
     
+    # 將 metadata 分成 train 和 test
+    train_meta_df, test_meta_df = dataset.metadata_split( all_clean_meta, cfg.TEST_SPLIT, cfg.RANDOM_SEED )
+
     print("正在處理訓練集 (含 Data Augmentation)...")
     print("=== 初始化訓練集 ===")
-    train_dataset = dataset.SkinLesionDataset(
-        csv_file=METADATA_DIR,
-        img_dir=IMAGE_DIR,
+    train_imgs = dataset.Skin_Datasest(
+        metadata_df=train_meta_df,
+        img_dir=cfg.IMAGE_DIR,
         mode='train',
-        augmentation=train_aug # 把增強邏輯傳進去
+        augmentation=cfg.AUG_CONFIG # 把增強邏輯傳進去
     )
     
     print("=== 初始化測試集 ===")
-    test_dataset = dataset.SkinLesionDataset(
-        csv_file=Test_csv_path,
-        img_dir=IMAGE_DIR,
+    test_imgs = dataset.Skin_Datasest(
+        metadata_df=test_meta_df,
+        img_dir=cfg.IMAGE_DIR,
         mode='test',
         augmentation=None # 測試集不做增強
     )
 
     print("=== 封裝 Data Loader ===")
     # --- 建立 DataLoader ---
-    train_loader = DataLoader(train_dataset, batch_size=BATCH_SIZE, shuffle=True)
-    test_loader = DataLoader(test_dataset, batch_size=BATCH_SIZE, shuffle=False)
+    train_loader = DataLoader(train_dataset, batch_size=cfg.BATCH_SIZE, shuffle=True)
+    test_loader = DataLoader(test_dataset, batch_size=cfg.BATCH_SIZE, shuffle=False)
 
     print("=== CNN 特徵提取 (Feature Extraction) ===")
     # 這裡的邏輯與之前類似，但輸入的是已經處理好的 loader
