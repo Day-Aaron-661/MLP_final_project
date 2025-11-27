@@ -22,7 +22,7 @@
 | `main.py` | **主程式**。控制完整研究流程：載入資料 -> 提取特徵 -> 訓練 RF 模型 -> 輸出評估結果。 |
 | `preprocess.py` |**資料前處理**。包含影像的縮放 (Resize) 與補白 (Padding) 至 224x224 ，以及 Data Augmentation (旋轉) 和 Metadata 的編碼處理。 |
 | `models.py` | **模型定義**。定義 EfficientNet-B0 特徵提取器與 Random Forest 分類器的架構。 |
-| `dataset.py` | **資料集載入器**。負責讀取資料集影像路徑與對應的 Metadata CSV 檔。 |
+| `dataset.py` | **資料集載入器**。負責讀取資料集影像與對應的 Metadata CSV 檔。 |
 | `utils.py` | **評估工具**。包含計算 Accuracy, Precision, Recall 以及本專案重視的 **F2-score** 。 |
 | `config.py` | **參數設定**。存放全域變數 (如影像路徑、Batch Size、Random Seed)。 |
 
@@ -30,9 +30,9 @@
 Mahdavi, A. (2020). Skin cancer (PAD-UFES-20) [Data set]. Kaggle. 
 https://www.kaggle.com/datasets/mahdavi1202/skin-cancer
 
-本研究使用 Skin cancer (PAD-UFES-20) 資料集，包含約 2300 張皮膚鏡影像。
+本研究使用 Skin cancer (PAD-UFES-20) 資料集，包含約 2300 張皮膚影像。
 * **影像預處理**: 統一 Resize 並 Padding 至 224x224 像素。
-* **類別**: 包含 akiec, bcc, bkl, df, mel, nv, vasc 等 7 大類。
+* **類別**: 包含 基底細胞癌(Squamous Cell Carcinoma, BCC)、鱗狀細胞癌(Squamous Cell Carcinoma, SCC)、黑色素瘤(Melanoma, MEL)、光化性角化病(Actinic Keratosis, ACK)、脂溢性角化病(Seborrheic Keratosis, SEK)、鮑恩氏病(Bowens Disease, BOD)和黑斑(Nevus, NEV) 等6大類。
 
 ## 組員 (Members)
 * 112550062 莊詔允
