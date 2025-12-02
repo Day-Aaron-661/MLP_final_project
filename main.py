@@ -35,8 +35,8 @@ def main():
 
     print("=== 封裝 Data Loader ===")
     # --- 建立 DataLoader ---
-    train_loader = DataLoader(train_dataset, batch_size=cfg.BATCH_SIZE, shuffle=True)
-    test_loader = DataLoader(test_dataset, batch_size=cfg.BATCH_SIZE, shuffle=False)
+    train_loader = DataLoader(train_imgs, batch_size=cfg.BATCH_SIZE, shuffle=True)
+    test_loader = DataLoader(test_imgs, batch_size=cfg.BATCH_SIZE, shuffle=False)
 
     print("=== CNN 特徵提取 (Feature Extraction) ===")
     # 這裡的邏輯與之前類似，但輸入的是已經處理好的 loader
@@ -64,4 +64,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
