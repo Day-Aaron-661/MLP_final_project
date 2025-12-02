@@ -2,6 +2,8 @@ import torch
 import torch.nn as nn
 import numpy as np
 from sklearn.ensemble import RandomForestClassifier
+from torchvision.models import efficientnet_b0, EfficientNet_B0_Weights
+
 
 
 
@@ -10,20 +12,10 @@ class CNN_model(nn.Module):
     
     def __init__(self):
         super(CNN_model, self).__init__()
-      
-        self.features = nn.Sequential(
-            nn.Conv2d(3, 32, kernel_size=3, padding=1),
-            nn.ReLU(),
-            nn.MaxPool2d(2),   # H/2, W/2
+        weights = EfficientNet_B0_Weights.DEFAULT
+        base_model = efficientnet_b0(weights=weights)
+        self.features = base_model.features  
 
-            nn.Conv2d(32, 64, kernel_size=3, padding=1),
-            nn.ReLU(),
-            nn.MaxPool2d(2),   # H/4, W/4
-
-            nn.Conv2d(64, 128, kernel_size=3, padding=1),
-            nn.ReLU(),
-            nn.AdaptiveAvgPool2d((1, 1))   # (128, 1, 1)
-        )
     
     def extract_features(self, model, dataloader, device="cuda"):
         model = model.to(device)
@@ -38,8 +30,8 @@ class CNN_model(nn.Module):
                 imgs = imgs.to(device)
                 meta = meta.to(device)
 
-                f_img = self.features(imgs)      # (B, 128, 1, 1)
-                f_img = torch.flatten(f_img, 1)  # (B, 128)
+                f_img = self.features(imgs)           # (B, 1280, 1, 1)
+                f_img = torch.mean(f_img, dim=[2,3])  # (B, 1280)
 
                 f_combined = torch.cat([f_img, meta], dim=1)
 
