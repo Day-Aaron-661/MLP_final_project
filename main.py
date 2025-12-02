@@ -43,11 +43,11 @@ def main():
     cnn_model = models.CNN_model()
     
     print("提取訓練集特徵...")
-    X_train_features = cnn_model.extract_features(cnn_model, train_loader)
+    X_train_features, train_labels = cnn_model.extract_features(cnn_model, train_loader)
     # 此時 X_train_features 已經是 (CNN特徵 + Metadata) 的混合向量 [cite: 68, 110]
     
     print("提取測試集特徵...")
-    X_test_features = cnn_model.extract_features(cnn_model, test_loader)
+    X_test_features, test_labels = cnn_model.extract_features(cnn_model, test_loader)
 
     print("=== Random Forest 分類 (Classification) ===")
     rf_model = models.RF_classifier()
@@ -64,3 +64,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
