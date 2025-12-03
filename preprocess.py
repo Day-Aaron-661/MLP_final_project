@@ -10,7 +10,7 @@ from sklearn.preprocessing import StandardScaler
 def get_clean_data( meta: pd.DataFrame ):
 # 去除一些 nan、不要的欄位，然後做mapping
 
-    clean_meta = meta.drop( columns = cfg.DROP_COLUMN )
+    clean_meta = meta.drop( columns = cfg.DROP_COLUMN)
     clean_meta = clean_meta.dropna()
 
     for col in cfg.MAPPING_COL:
@@ -20,7 +20,7 @@ def get_clean_data( meta: pd.DataFrame ):
         clean_meta[col] = clean_meta[col].fillna(-1).astype(int)
 
     clean_meta['region'] = clean_meta['region'].astype(str).str.upper().str.strip()
-    clean_meta['region'] = clean_meta['region'].mapp( cfg.REGION_MAP )
+    clean_meta['region'] = clean_meta['region'].map( cfg.REGION_MAP )
     clean_meta['region'] = clean_meta['region'].fillna(-1).astype(int)
 
     clean_meta['diagnostic'] = clean_meta['diagnostic'].astype(str).str.upper().str.strip()
@@ -41,7 +41,7 @@ def resize_and_padding( img, target_size=cfg.IMAGE_SIZE ):
     new_h = int(img_h * scale)
 
     # 縮放照片
-    resized_img = cv2.resize( img, (new_h, new_w), interpolation=cv2.INTER_LINEAR )
+    resized_img = cv2.resize( img, (new_w, new_h), interpolation=cv2.INTER_LINEAR )
 
     # 建立全白背景
     padding_background = np.full( (target_h, target_w, 3) , 255, dtype=np.uint8 )
@@ -76,6 +76,5 @@ def augment_image( image, rotation_range: int = 120 ):
         borderMode=cv2.BORDER_CONSTANT, 
         borderValue=(255, 255, 255)
     )
-
 
     return rotated

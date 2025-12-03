@@ -11,21 +11,23 @@ import preprocess
 
 
 class Skin_Datasest(Dataset):
-    def __init__( self, metadata_df, img_dir, mode='test', augment_config=None ):
+    def __init__( self, metadata_df, img_dir, mode='test', augmentation=None ):
         """
         Args:
             metadata_df (DataFrame): 已經切分好的 DataFrame
             img_dir (str): 圖片資料夾路徑
             mode (str): 'train' 或 'test'
-            augment_config (dict): 設定哪些類別需要增強，例如 {0: 2, 4: 1} 
+            augmentation (dict): 設定哪些類別需要增強，例如 {0: 2, 4: 1} 
                                    表示 Class 0 增強 2 倍，Class 4 增強 1 倍
         """
         self.mode = mode
         self.images = []
+        self.labels = []
+        self.metadata_vectors = []
         
         # 1. 處理 Metadata 表格特徵 
         self.metadata_features_mat = metadata_df[cfg.META_FEATURE_COLS].values.astype(np.float32)
-        self.labels = metadata_df[cfg.LABEL_COL].values.astype(np.int32)
+        self.meta_labels = metadata_df[cfg.LABEL_COL].values.astype(np.int32)
         self.img_ids = metadata_df['img_id'].values
         
         print(f"[{mode}] 開始載入與處理影像 (共 {len(metadata_df)} 筆原圖)...")
@@ -45,18 +47,18 @@ class Skin_Datasest(Dataset):
             base_img = preprocess.resize_and_padding(img, target_size=cfg.IMAGE_SIZE)
             
             # 加入原始資料到 List
-            self._add_sample(base_img, self.metadata_features_mat[idx], self.labels[idx])
+            self._add_sample(base_img, self.metadata_features_mat[idx], self.meta_labels[idx])
             
             # --- 對指定的 label 類別做 data augmentation 解決 data imbalance ---
-            if mode == 'train' and augment_config and self.labels[idx] in augment_config:
+            if mode == 'train' and augmentation and self.meta_labels[idx] in augmentation:
                 
-                num_augments = augment_config[self.labels[idx]] # 取得這個類別每個照片要增加多少張
+                num_augments = augmentation[self.meta_labels[idx]] # 取得這個類別每個照片要增加多少張
                 
                 for i in range(num_augments):
                     # 呼叫 augmentation
                     aug_img = preprocess.augment_image(base_img)
                     
-                    self._add_sample(aug_img,  self.metadata_features_mat[idx], self.labels[idx])
+                    self._add_sample(aug_img,  self.metadata_features_mat[idx], self.meta_labels[idx])
 
         print(f"[{mode}] 載入完成。最終資料總數: {len(self.images)} (含增強)")
 
