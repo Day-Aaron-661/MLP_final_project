@@ -36,9 +36,9 @@ def resize_and_padding( img, target_size=cfg.IMAGE_SIZE ):
     target_h, target_w = target_size
 
     # 計算縮放比例
-    scale = min(target_w / w, target_h / h)
-    new_w = int(w * scale)
-    new_h = int(h * scale)
+    scale = min(target_w / img_w, target_h / img_h)
+    new_w = int(img_w * scale)
+    new_h = int(img_h * scale)
 
     # 縮放照片
     resized_img = cv2.resize( img, (new_h, new_w), interpolation=cv2.INTER_LINEAR )

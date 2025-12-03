@@ -48,15 +48,15 @@ class Skin_Datasest(Dataset):
             self._add_sample(base_img, self.metadata_features_mat[idx], self.labels[idx])
             
             # --- 對指定的 label 類別做 data augmentation 解決 data imbalance ---
-            if mode == 'train' and augment_config and label in augment_config:
+            if mode == 'train' and augment_config and self.labels[idx] in augment_config:
                 
-                num_augments = augment_config[label] # 取得這個類別每個照片要增加多少張
+                num_augments = augment_config[self.labels[idx]] # 取得這個類別每個照片要增加多少張
                 
                 for i in range(num_augments):
                     # 呼叫 augmentation
                     aug_img = preprocess.augment_image(base_img)
                     
-                    self._add_sample(aug_img, meta_vec, label)
+                    self._add_sample(aug_img,  self.metadata_features_mat[idx], self.labels[idx])
 
         print(f"[{mode}] 載入完成。最終資料總數: {len(self.images)} (含增強)")
 
@@ -79,13 +79,13 @@ class Skin_Datasest(Dataset):
         return self.images[idx], torch.tensor(self.metadata_vectors[idx]).float(), torch.tensor(self.labels[idx]).int()
 
 
-def metadata_split( all_meta: pd.DataFrame, test_split=TEST_SPLIT, random_seed=RANDOM_SEED ) -> t.Tuple[pd.DataFrame, pd.DataFrame]:
+def metadata_split( all_meta: pd.DataFrame, test_split=cfg.TEST_SPLIT, random_seed=cfg.RANDOM_SEED ) -> t.Tuple[pd.DataFrame, pd.DataFrame]:
     if all_meta.shape[0] == 0:
         print("no metadata")
         return
     
     X = all_meta
-    y = all_meta[LABEL_COL]
+    y = all_meta[cfg.LABEL_COL]
 
     train_meta_df, test_meta_df = train_test_split(
         X,
@@ -94,10 +94,10 @@ def metadata_split( all_meta: pd.DataFrame, test_split=TEST_SPLIT, random_seed=R
         random_state=random_seed
     )
 
-    return train_df, test_df
+    return train_meta_df, test_meta_df
 
 
-def load_csv( csv_path=METADATA_PATH ):
+def load_csv( csv_path=cfg.METADATA_PATH ):
 # just load metadata
     metadata = pd.read_csv(csv_path)
     return metadata

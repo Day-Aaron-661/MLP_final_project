@@ -102,7 +102,7 @@ RANDOM_SEED = 42
 
 TEST_SPLIT = 0.2
 
-NUM_CLASS = len(CLASS_MAP) # = 6
+NUM_CLASS = len(LABEL_MAP) # = 6
 
 AUG_CONFIG = [0, 4, 12, 3, 0, 3]
 

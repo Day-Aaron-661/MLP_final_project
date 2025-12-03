@@ -58,9 +58,19 @@ def main():
     print("=== 評估與結果 (Evaluation) ===")
     predictions = rf_model.predict(X_test_features)
     
-    # 計算 Recall, Precision, F2-score [cite: 71-78]
-    metrics = utils.calculate_metrics(test_labels, predictions)
-    utils.print_evaluation_report(metrics)
+    # 計算 Confusion Matrix, Accuracy, Precision, Recall, F2-score [cite: 71-78]
+    cm, classes = utils.confusion_matrix(test_labels, predictions)
+    print("\n===== Evaluation Report =====")
+    print("Confusion Matrix:")
+    print(cm)
+    print("\nClasses:", classes)
+    print(f"\nAccuracy: {utils.accuracy(cm):.4f}")
+    precision = utils.precision(cm)
+    print(f"Precision: {precision:.4f}")
+    recall = utils.recall(cm)
+    print(f"Recall: {recall:.4f}")
+    print(f"F2-score: {utils.f2_score(precision, recall):.4f}")
+
 
 if __name__ == "__main__":
     main()
