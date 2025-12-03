@@ -10,7 +10,7 @@ from sklearn.preprocessing import StandardScaler
 def get_clean_data( meta: pd.DataFrame ):
 # 去除一些 nan、不要的欄位，然後做mapping
 
-    clean_meta = meta.drop( cfg.DROP_COLUMN )
+    clean_meta = meta.drop( columns = cfg.DROP_COLUMN )
     clean_meta = clean_meta.dropna()
 
     for col in cfg.MAPPING_COL:
@@ -76,5 +76,6 @@ def augment_image( image, rotation_range: int = 120 ):
         borderMode=cv2.BORDER_CONSTANT, 
         borderValue=(255, 255, 255)
     )
+
 
     return rotated
