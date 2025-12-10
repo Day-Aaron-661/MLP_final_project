@@ -94,7 +94,7 @@ LABEL_MAP = {
     "NEV": 5,
 }
 
-IMAGE_SIZE = (224, 224) # b0 224 224, b1 240 240
+IMAGE_SIZE = (224, 224) # b0 resNet 224,224  b1 240 240
 
 LABEL_COL = "diagnostic"
 
@@ -104,12 +104,12 @@ TEST_SPLIT = 0.2
 
 NUM_CLASS = len(LABEL_MAP) # = 6
 
-AUG_CONFIG = [0, 0, 0, 0, 0, 0] #無
-# AUG_CONFIG = [0, 4, 12, 3, 0, 3] #有
+AUG_CONFIG = [0, 0, 0, 0, 0, 0] # 無
+# AUG_CONFIG = [0, 4, 12, 3, 0, 3] # 有
 
 # ========= model 相關參數 ========= #
 
-BATCH_SIZE = 32 # b0 32, b1 16
+BATCH_SIZE = 32
 
 RF_N_ESTIMATOR = 100 
 
