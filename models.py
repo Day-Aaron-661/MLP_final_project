@@ -4,20 +4,27 @@ import numpy as np
 from sklearn.ensemble import RandomForestClassifier
 from torchvision.models import efficientnet_b0, EfficientNet_B0_Weights
 from torchvision.models import efficientnet_b1, EfficientNet_B1_Weights
-
+from torchvision.models import resnet50, ResNet50_Weights
 
 class FineTuneModel(nn.Module):
     def __init__(self, num_classes=6):
         super(FineTuneModel, self).__init__()
 
-        weights = EfficientNet_B0_Weights.DEFAULT
-        self.base_model = efficientnet_b0(weights=weights)
+        # weights = EfficientNet_B0_Weights.DEFAULT
+        # self.base_model = efficientnet_b0(weights=weights)
         # weights = EfficientNet_B1_Weights.DEFAULT
         # self.base_model = efficientnet_b1(weights=weights)
+        # self.base_model.classifier = nn.Sequential(
+        #     nn.Dropout(p=0.2, inplace=True),
+        #     nn.Linear(1280, num_classes),
+        # )
         
-        self.base_model.classifier = nn.Sequential(
-            nn.Dropout(p=0.2, inplace=True),
-            nn.Linear(1280, num_classes),
+        # ResNet50
+        weights = ResNet50_Weights.DEFAULT
+        self.base_model = resnet50(weights=weights)
+        self.base_model.fc = nn.Sequential(
+            nn.Dropout(0.2),
+            nn.Linear(2048, num_classes) 
         )
 
     def forward(self, x):
@@ -28,12 +35,20 @@ class CNN_model(nn.Module):
     
     def __init__(self, weight_path=None):
         super(CNN_model, self).__init__()
-        base_model = efficientnet_b0(weights=None)
-        # base_model = efficientnet_b1(weights=None)
 
-        base_model.classifier = nn.Sequential(
-            nn.Dropout(p=0.2, inplace=True),
-            nn.Linear(1280, 6),
+        # efficientNet
+        # base_model = efficientnet_b0(weights=None)
+        # base_model = efficientnet_b1(weights=None)
+        # base_model.classifier = nn.Sequential(
+        #     nn.Dropout(p=0.2, inplace=True),
+        #     nn.Linear(1280, 6),
+        # )
+
+        # # resNet
+        base_model = resnet50(weights=None)
+        base_model.fc = nn.Sequential(
+            nn.Dropout(0.2),
+            nn.Linear(2048, 6)
         )
         
         if weight_path:
@@ -42,9 +57,12 @@ class CNN_model(nn.Module):
             base_model.load_state_dict(state_dict)
         else:
             print("使用 ImageNet 預設權重")
-            base_model = efficientnet_b0(weights=EfficientNet_B0_Weights.DEFAULT)
-            # base_model = efficientnet_b1(weights=EfficientNet_B1_Weights.DEFAULT)
-        self.features = base_model.features  
+            # base_model = efficientnet_b0(weights=EfficientNet_B0_Weights.DEFAULT) # b0
+            # base_model = efficientnet_b1(weights=EfficientNet_B1_Weights.DEFAULT) # b1
+            base_model = resnet50(weights=ResNet50_Weights.DEFAULT) # resNet
+
+        # self.features = base_model.features # b0, b1
+        self.features = nn.Sequential(*list(base_model.children())[:-1]) # resNet
 
     
     def extract_features(self, model, dataloader, device="cuda"):
@@ -60,8 +78,8 @@ class CNN_model(nn.Module):
                 imgs = imgs.to(device)
                 meta = meta.to(device)
 
-                f_img = self.features(imgs)           # (B, 1280, 1, 1)
-                f_img = torch.mean(f_img, dim=[2,3])  # (B, 1280)
+                f_img = self.features(imgs)
+                f_img = torch.mean(f_img, dim=[2,3])
 
                 f_combined = torch.cat([f_img, meta], dim=1)
 
@@ -105,8 +123,8 @@ def tune_rf_hyperparameters(X_train, y_train):
     # 1. 定義參數網格
     # 這裡的範圍是專門為了「抗 Overfit」設計的
     param_dist = {
-        'n_estimators': [100, 200, 300, 500],        # 樹越多通常越穩定
-        'max_depth': [10, 15, 20, 30, None],         # 限制深度！
+        'n_estimators': [200, 300, 500],        # 樹越多通常越穩定
+        'max_depth': [10, 15, 20, 30],         # 限制深度！
         'min_samples_split': [5, 10, 20],            # 避免切分太細
         'min_samples_leaf': [2, 4, 8, 12],           # 關鍵：葉子不能只有 1 個樣本
         'max_features': ['sqrt', 'log2'],            # 限制每棵樹看到的特徵
@@ -123,7 +141,7 @@ def tune_rf_hyperparameters(X_train, y_train):
         param_distributions=param_dist,
         n_iter=50,             # 隨機嘗試 50 種組合
         cv=5,                  # 5-Fold 交叉驗證 (最穩健的評估)
-        verbose=2,
+        verbose=0,
         random_state=42,
         n_jobs=-1,             # 用盡所有 CPU 核心
         scoring='f1_macro'     # 針對多類別不平衡，優化 F1-score 
@@ -152,11 +170,16 @@ class CNN_classifier:
 
         self.model = efficientnet_b0(weights=EfficientNet_B0_Weights.DEFAULT)
         # self.model = efficientnet_b1(weights=EfficientNet_B1_Weights.DEFAULT)
-        
         self.model.classifier = nn.Sequential(
             nn.Dropout(p=0.2, inplace=True),
             nn.Linear(1280, num_classes),
         )
+
+        # self.model = resnet50(weights=ResNet50_Weights.DEFAULT)
+        # self.model.fc = nn.Sequential(
+        #     nn.Dropout(0.2),
+        #     nn.Linear(2048, num_classes)
+        # )
         
         self.model.to(self.device)
         
