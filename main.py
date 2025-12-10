@@ -30,7 +30,7 @@ def main():
         metadata_df=test_meta_df,
         img_dir=cfg.IMAGE_DIR,
         mode='test',
-        augmentation=None # 測試集不做增強
+        augmentation=cfg.AUG_CONFIG # 測試集不做增強
     )
 
     print("=== 封裝 Data Loader ===")
@@ -41,9 +41,9 @@ def main():
 
     print("=== CNN 特徵提取 (Feature Extraction) ===")
     # 這裡的邏輯與之前類似，但輸入的是已經處理好的 loader
-    # cnn_model = models.CNN_model(weight_path="fine_tuned_efficientnetb0.pth")
+    cnn_model = models.CNN_model(weight_path="fine_tuned_efficientnetb0.pth")
     # cnn_model = models.CNN_model(weight_path="fine_tuned_efficientnetb1.pth")
-    cnn_model = models.CNN_model(weight_path="fine_tuned_efficientnetresnet.pth")
+    # cnn_model = models.CNN_model(weight_path="fine_tuned_efficientnetresnet.pth")
     
     print("提取訓練集特徵...")
     X_train_features, train_labels = cnn_model.extract_features(cnn_model, train_loader)
@@ -56,19 +56,20 @@ def main():
     rf_model = models.RF_classifier()
     
     print("訓練 RF 模型...")
-    # rf_model.train(X_train_features, train_labels)
-    best_rf_model = models.tune_rf_hyperparameters(X_train_features, train_labels)
+    rf_model.train(X_train_features, train_labels)
+    # best_rf_model = models.tune_rf_hyperparameters(X_train_features, train_labels)
 
     # 直接用這個 best_rf_model 預測
     print("=== 評估與結果 (Evaluation) ===")
-    # predictions = rf_model.predict(X_test_features)
-    predictions = best_rf_model.predict(X_test_features)
+    predictions = rf_model.predict(X_test_features)
+    # predictions = best_rf_model.predict(X_test_features)
     
     # 計算 Confusion Matrix, Accuracy, Precision, Recall, F2-score
     cm, classes = utils.confusion_matrix(test_labels, predictions)
     print("\n===== Evaluation Report =====")
     print("Confusion Matrix:")
     print(cm)
+    utils.plot_confusion_matrix(cm, classes)
     print("\nClasses:", classes)
     print(f"\nAccuracy: {utils.accuracy(cm):.4f}")
     precision = utils.precision(cm)
@@ -100,7 +101,7 @@ def main():
 #         metadata_df=test_meta_df,
 #         img_dir=cfg.IMAGE_DIR,
 #         mode='test',
-#         augmentation=None # 測試集不做增強
+#         augmentation=cfg.AUG_CONFIG
 #     )
 
 #     print("=== 封裝 Data Loader ===")
@@ -128,6 +129,7 @@ def main():
 #     print("\n===== Evaluation Report =====")
 #     print("Confusion Matrix:")
 #     print(cm)
+#     utils.plot_confusion_matrix(cm, classes)
 #     print("\nClasses:", classes)
 #     print(f"\nAccuracy: {utils.accuracy(cm):.4f}")
 #     precision = utils.precision(cm)
@@ -138,4 +140,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
