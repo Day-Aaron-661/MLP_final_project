@@ -26,7 +26,7 @@ def train_cnn_stage():
     
     # 2. 初始化模型
     device = "cuda" if torch.cuda.is_available() else "cpu"
-    print(device)
+
     model = FineTuneModel(num_classes=cfg.NUM_CLASS).to(device)
     
     # 3. 定義 Loss 和 Optimizer
@@ -35,7 +35,7 @@ def train_cnn_stage():
     optimizer = optim.Adam(model.parameters(), lr=1e-4) # 學習率建議設小一點
     
     # 4. 訓練迴圈 (簡單跑個 5-10 Epochs 即可)
-    epochs = 20
+    epochs = 15
     print(f"開始微調 CNN (共 {epochs} Epochs)...")
     
     for epoch in range(epochs):
@@ -56,7 +56,9 @@ def train_cnn_stage():
         print(f"Epoch [{epoch+1}/{epochs}] Loss: {running_loss/len(train_loader):.4f}")
 
     # 5. 儲存訓練好的權重 (Save Weights)
-    save_path = "fine_tuned_efficientnet.pth"
+    # save_path = "fine_tuned_efficientnetb0.pth"
+    # save_path = "fine_tuned_efficientnetb1.pth"
+    save_path = "fine_tuned_efficientnetresnet.pth"
     torch.save(model.base_model.state_dict(), save_path)
     print(f"模型權重已儲存至: {save_path}")
 
