@@ -37,12 +37,13 @@ class Skin_Datasest(Dataset):
             
             # 讀取圖片
             img_path = os.path.join(img_dir, self.img_ids[idx])
-            img = cv2.imread(img_path)
+            # img = cv2.imread(img_path)
+            # 解決 Windows 中文路徑問題的讀法
+            img = cv2.imdecode(np.fromfile(img_path, dtype=np.uint8), cv2.IMREAD_COLOR)
 
             if img is None:
                 continue # 沒讀到照片就跳過
             img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-            
             # 基礎處理：Resize & Padding 至 224x224
             base_img = preprocess.resize_and_padding(img, target_size=cfg.IMAGE_SIZE)
             
