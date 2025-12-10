@@ -1,15 +1,20 @@
 import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.metrics import confusion_matrix as sk_confusion_matrix, ConfusionMatrixDisplay
 
 def confusion_matrix(y_true, y_pred):
     y_true = np.array(y_true)
     y_pred = np.array(y_pred)
     classes = np.unique(np.concatenate([y_true, y_pred]))
-    num_classes = len(classes)
-    cm = np.zeros((num_classes, num_classes), dtype=int)
-    class_to_idx = {c: i for i, c in enumerate(classes)}
-    for t, p in zip(y_true, y_pred):
-        cm[class_to_idx[t], class_to_idx[p]] += 1
+    cm = sk_confusion_matrix(y_true, y_pred, labels=classes)
     return cm, classes
+
+
+def plot_confusion_matrix(cm, classes, title="Confusion Matrix"):
+    disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=classes)
+    disp.plot(cmap=plt.cm.Blues, values_format="d")
+    disp.ax_.set_title(title)
+    plt.show()
 
 
 def accuracy(cm):
