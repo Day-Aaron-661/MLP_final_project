@@ -177,7 +177,7 @@ class CNN_classifier:
             
             loop = tqdm(train_loader, desc=f"Epoch {epoch+1}/{epochs}")
             
-            for images, labels in loop:
+            for images, meta, labels in loop:
 
                 images = images.to(self.device)
                 labels = labels.to(self.device, dtype=torch.long)
@@ -212,7 +212,7 @@ class CNN_classifier:
         all_preds = []
         
         with torch.no_grad():
-            for images, labels in tqdm(test_loader, desc="Predicting"):
+            for images, meta, labels in tqdm(test_loader, desc="Predicting"):
                 images = images.to(self.device)
                 
                 outputs = self.model(images)
