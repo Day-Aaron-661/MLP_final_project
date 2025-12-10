@@ -38,15 +38,12 @@ def main():
     train_loader = DataLoader(train_imgs, batch_size=cfg.BATCH_SIZE, shuffle=True)
     test_loader = DataLoader(test_imgs, batch_size=cfg.BATCH_SIZE, shuffle=False)
 
-    cnn_classifier = models.CNN_classifier(
-        num_classes=cfg.NUM_CLASS,
-        learning_rate=1e-4, 
-        device="cuda"
-    )
 
     print("=== CNN 特徵提取 (Feature Extraction) ===")
     # 這裡的邏輯與之前類似，但輸入的是已經處理好的 loader
-    cnn_model = models.CNN_model(weight_path="fine_tuned_efficientnet.pth")
+    # cnn_model = models.CNN_model(weight_path="fine_tuned_efficientnetb0.pth")
+    # cnn_model = models.CNN_model(weight_path="fine_tuned_efficientnetb1.pth")
+    cnn_model = models.CNN_model(weight_path="fine_tuned_efficientnetresnet.pth")
     
     print("提取訓練集特徵...")
     X_train_features, train_labels = cnn_model.extract_features(cnn_model, train_loader)
