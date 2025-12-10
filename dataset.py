@@ -51,8 +51,8 @@ class Skin_Datasest(Dataset):
             self._add_sample(base_img, self.metadata_features_mat[idx], self.meta_labels[idx])
             
             # --- 對指定的 label 類別做 data augmentation 解決 data imbalance ---
-            if mode == 'train' and augmentation and self.meta_labels[idx] in augmentation:
-                
+            if augmentation:
+            # if augmentation and self.meta_labels[idx] in augmentation:
                 num_augments = augmentation[self.meta_labels[idx]] # 取得這個類別每個照片要增加多少張
                 
                 for i in range(num_augments):
