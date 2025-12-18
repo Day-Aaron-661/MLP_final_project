@@ -5,7 +5,7 @@
 
 本研究結合了 **CNN (EfficientNet-B0)** 強大的特徵提取能力與 **Random Forest** 的分類能力，期望達到更客觀且快速的輔助診斷 。
 
-## 研究方法 (Methodology)
+## 研究方法 (Method)
 我們的流程包含幾個主要階段：
 1. **Load Data**: 讀取資料集
 2. **Data Preprocessing**: 資料預處理，統一影像大小，並針對較少樣本數的類別做 data augmentation。
