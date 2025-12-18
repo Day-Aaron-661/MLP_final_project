@@ -8,7 +8,6 @@ from sklearn.preprocessing import StandardScaler
 
 
 def get_clean_data( meta: pd.DataFrame ):
-# 去除一些 nan、不要的欄位，然後做mapping
 
     clean_meta = meta.drop( columns = cfg.DROP_COLUMN)
     clean_meta = clean_meta.dropna()
@@ -31,26 +30,21 @@ def get_clean_data( meta: pd.DataFrame ):
 
 
 def resize_and_padding( img, target_size=cfg.IMAGE_SIZE ):
-# 做 resize 然後做 padding
+
     img_h, img_w = img.shape[:2]
     target_h, target_w = target_size
 
-    # 計算縮放比例
     scale = min(target_w / img_w, target_h / img_h)
     new_w = int(img_w * scale)
     new_h = int(img_h * scale)
 
-    # 縮放照片
     resized_img = cv2.resize( img, (new_w, new_h), interpolation=cv2.INTER_LINEAR )
 
-    # 建立全白背景
     padding_background = np.full( (target_h, target_w, 3) , 255, dtype=np.uint8 )
 
-    # 計算置中位置
     x_offset = ( target_w - new_w ) // 2
     y_offset = ( target_h - new_h ) // 2
 
-    # 把 resized_img 放進全白背景的中央
     padding_background[y_offset : y_offset + new_h, x_offset : x_offset + new_w] = resized_img
 
     return padding_background
@@ -60,21 +54,18 @@ def augment_image( image, rotation_range: int = 120 ):
 
     h, w = image.shape[:2]
 
-    # 產生隨機角度
     angle = np.random.uniform(-rotation_range, rotation_range)
     
-    # 計算旋轉矩陣 (中心點為旋轉軸)
     center = (w // 2, h // 2)
     M = cv2.getRotationMatrix2D(center, angle, scale=1.0)
     
-    # 執行旋轉
-    # borderValue=(255, 255, 255) 確保旋轉後露出的背景是白色的，與 Padding 一致
     rotated = cv2.warpAffine(
         image, 
-        M, # 旋轉矩陣
-        (w, h), # img_size
+        M,
+        (w, h),
         borderMode=cv2.BORDER_CONSTANT, 
         borderValue=(255, 255, 255)
     )
+
 
     return rotated
