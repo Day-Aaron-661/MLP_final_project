@@ -2,23 +2,16 @@ import os
 
 # ========= FILE PATH ========= #
 
-# project資料夾絕對路徑
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-# data 資料夾絕對路徑
 DATA_DIR = os.path.join(BASE_DIR, "data") 
  
-# images 資料夾路徑
 IMAGE_DIR = os.path.join(DATA_DIR, "images")
 
-# metadata 路徑
 METADATA_PATH = os.path.join(DATA_DIR, "metadata.csv")
 
-# result 存放路徑
 RESULT_DIR = os.path.join(BASE_DIR, "results") 
 
-# ========= data 相關參數 ========= #
-# 要丟棄哪些欄位
 DROP_COLUMN = [
     'patient_id',
     'lesion_id',
@@ -37,7 +30,6 @@ DROP_COLUMN = [
     'diameter_2'
 ]
 
-# 哪些欄位要做 mapping
 MAPPING_COL = [
     'itch',
     'grew',
@@ -48,8 +40,6 @@ MAPPING_COL = [
     'biopsed'
 ]
 
-# 明確定義哪些欄位是「特徵 (X)」
-# 這裡不包含 'img_id' (因為它是索引)
 META_FEATURE_COLS = [
     'itch',
     'grew',
@@ -107,8 +97,6 @@ NUM_CLASS = len(LABEL_MAP) # = 6
 AUG_CONFIG = [0, 0, 0, 0, 0, 0] # 無
 # AUG_CONFIG = [0, 4, 12, 3, 0, 3] # 有
 
-# ========= model 相關參數 ========= #
-
 BATCH_SIZE = 32
 
 RF_N_ESTIMATOR = 100 
@@ -117,3 +105,4 @@ RF_MAX_DEPTH = None
 # RF_MAX_DEPTH = 5
 # RF_MAX_DEPTH = 10
 # RF_MAX_DEPTH = 15
+
