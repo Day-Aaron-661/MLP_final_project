@@ -1,7 +1,7 @@
 # Skin Disease Classification using CNN & Random Forest
 
 ## 專案簡介 (Project Overview)
-本專案為機器學習概論與實作期中專題報告。我們提出了一種 **Two-stage pipeline** 的方法來辨識皮膚疾病影像。
+本專案為機器學習概論與實作期末專題報告。我們提出了一種 **Two-stage pipeline** 的方法來辨識皮膚疾病影像。
 
 本研究結合了 **CNN (EfficientNet-B0)** 強大的特徵提取能力與 **Random Forest** 的分類能力，期望達到更客觀且快速的輔助診斷 。
 
