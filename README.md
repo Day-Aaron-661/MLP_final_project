@@ -25,7 +25,7 @@
 | `dataset.py` | **資料集載入器**。負責讀取資料集影像與對應的 Metadata CSV 檔。 |
 | `utils.py` | **評估工具**。包含計算 Accuracy, Precision, Recall 以及本專案重視的 **F2-score** 。 |
 | `config.py` | **參數設定**。存放全域變數 (如影像路徑、Batch Size、Random Seed)。 |
-| `train_cnn.py` | **微調模型**。訓練以及微調CNN pretrained model。 |
+| `train_cnn.py` | **微調模型**。訓練以及微調 CNN pretrained model。 |
 
 ## 資料集 (Dataset)
 Mahdavi, A. (2020). Skin cancer (PAD-UFES-20) [Data set]. Kaggle. 
