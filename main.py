@@ -9,11 +9,9 @@ from torch.utils.data import DataLoader
 
 def main():
 
-    # 先載入 metadata，然後去除一些 nan 和不要的欄位
     all_meta = dataset.load_csv( csv_path=cfg.METADATA_PATH )
     all_clean_meta = preprocess.get_clean_data( all_meta )
-    
-    # 將 metadata 分成 train 和 test
+
     train_meta_df, test_meta_df = dataset.metadata_split( all_clean_meta, cfg.TEST_SPLIT, cfg.RANDOM_SEED )
 
     print("正在處理訓練集 (含 Data Augmentation)...")
@@ -36,7 +34,6 @@ def main():
     print("=== 封裝 Data Loader ===")
     train_loader = DataLoader(train_imgs, batch_size=cfg.BATCH_SIZE, shuffle=True)
     test_loader = DataLoader(test_imgs, batch_size=cfg.BATCH_SIZE, shuffle=False)
-
 
     print("=== CNN 特徵提取 (Feature Extraction) ===")
     cnn_model = models.CNN_model(weight_path="fine_tuned_efficientnetb0.pth")
@@ -109,7 +106,6 @@ def main():
 
 #     cnn_classifier.train(train_loader, epochs=5)
 
-#     # === 4. 預測與評估 ===
 #     predictions = cnn_classifier.predict(test_loader)
 
 #     test_labels = test_imgs.labels
@@ -129,4 +125,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
