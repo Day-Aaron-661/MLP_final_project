@@ -51,7 +51,6 @@ def main():
     
     print("訓練 RF 模型...")
     rf_model.train(X_train_features, train_labels)
-    # best_rf_model = models.tune_rf_hyperparameters(X_train_features, train_labels)
 
     print("=== 評估與結果 (Evaluation) ===")
     predictions = rf_model.predict(X_test_features)
@@ -125,5 +124,6 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
