@@ -32,7 +32,7 @@ https://www.kaggle.com/datasets/mahdavi1202/skin-cancer
 
 本研究使用 Skin cancer (PAD-UFES-20) 資料集，包含約 2300 張皮膚影像。
 * **影像預處理**: 統一 Resize 並 Padding 至 224x224 像素。
-* **類別**: 包含 基底細胞癌(Basal Cell Carcinoma, BCC)、鱗狀細胞癌(Squamous Cell Carcinoma, SCC)、黑色素瘤(Melanoma, MEL)、光化性角化病(Actinic Keratosis, ACK)、脂溢性角化病(Seborrheic Keratosis, SEK)、鮑恩氏病(Bowens Disease, BOD)和黑斑(Nevus, NEV) 等6大類。
+* **類別**: 包含 基底細胞癌(Basal Cell Carcinoma, BCC)、鱗狀細胞癌(Squamous Cell Carcinoma, SCC)、黑色素瘤(Melanoma, MEL)、光化性角化病(Actinic Keratosis, ACK)、脂溢性角化病(Seborrheic Keratosis, SEK)和黑斑(Nevus, NEV) 等6大類。
 
 ## 組員 (Members)
 * 112550062 莊詔允
