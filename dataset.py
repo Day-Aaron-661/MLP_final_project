@@ -38,11 +38,9 @@ class Skin_Datasest(Dataset):
             self._add_sample(base_img, self.metadata_features_mat[idx], self.meta_labels[idx])
             
             if augmentation:
-            # if augmentation and self.meta_labels[idx] in augmentation:
                 num_augments = augmentation[self.meta_labels[idx]]
                 
                 for i in range(num_augments):
-                    # 呼叫 augmentation
                     aug_img = preprocess.augment_image(base_img)
                     
                     self._add_sample(aug_img,  self.metadata_features_mat[idx], self.meta_labels[idx])
@@ -84,7 +82,7 @@ def metadata_split( all_meta: pd.DataFrame, test_split=cfg.TEST_SPLIT, random_se
 
 
 def load_csv( csv_path=cfg.METADATA_PATH ):
-# just load metadata
     metadata = pd.read_csv(csv_path)
     return metadata
+
 
