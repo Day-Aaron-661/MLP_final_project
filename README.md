@@ -10,7 +10,7 @@
 1. **Load Data**: 讀取資料集
 2. **Data Preprocessing**: 資料預處理，統一影像大小，並針對較少樣本數的類別做 data augmentation。
 3. **Feature Extraction**: 使用預訓練的 EfficientNet-B0 從影像中提取特徵向量 (Feature Vector)。
-4. **Classification**: 將影像特徵與病患 Metadata (如年齡、性別、部位) 串接 (Concatenation) 後，送入 Random Forest 進行最終分類。
+4. **Classification**: 將影像特徵與病患 Metadata (如疼痛、流血、搔癢) 串接 (Concatenation) 後，送入 Random Forest 進行最終分類。
 5. **Evaluation metric**: 計算並呈現模型評估指標如 recall, precision, F2-score, 和 confusion matrix等
 
 ## 專案檔案結構 (Project Structure)
